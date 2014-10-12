@@ -8,9 +8,9 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.event.*;
+import GameState.GameStateManager;
 
-public class GamePanel extends JPanel implements Runnable, KeyListener
-{
+public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     //Game Dimensions
     public static final int WIDTH = 320;
@@ -26,6 +26,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     //Game Canvas
     private BufferedImage image;
     private Graphics2D gr;
+
+    //Game State Manager
+    private GameStateManager gsm;
 
     //Game Panel
     public GamePanel()
@@ -52,8 +55,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     private void init()
     {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_3BYTE_BGR);
-        gr = (Graphics2D) gr;
+        gr = (Graphics2D) image.getGraphics();
         running = true;
+
+        gsm = new GameStateManager();
+
     }
 
     //
@@ -92,15 +98,19 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     }
 
     private void update()
-    {}
+    {
+        gsm.update();
+    }
 
     private void draw()
-    {}
+    {
+        gsm.draw(gr);
+    }
 
     private void drawToScreen()
     {
         Graphics gr2 = getGraphics();
-        gr2.drawImage(image, 0, 0, null);
+        gr2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
         gr2.dispose();
     }
 
@@ -108,9 +118,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     {}
 
     public void keyPressed(KeyEvent key)
-    {}
+    {
+        gsm.keyPressed(key.getKeyCode());
+    }
 
     public void keyReleased(KeyEvent key)
-    {}
+    {
+        gsm.keyReleased(key.getKeyCode());
+    }
 
 }
