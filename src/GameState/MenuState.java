@@ -55,7 +55,7 @@ public class MenuState extends GameState {
 
         gr.setColor(titleColor);
         gr.setFont(titleFont);
-        gr.drawString("Clover", 80, 70);
+        gr.drawString("Clover", 100, 70);
 
         gr.setFont(font);
         for(int i=0; i<options.length; i++)
@@ -79,6 +79,7 @@ public class MenuState extends GameState {
         if(currentChoice == 0)
         {
             //Start
+            gsm.setState(GameStateManager.LEVEL1STATE);
         }
         if (currentChoice == 1)
         {
