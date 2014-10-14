@@ -107,6 +107,8 @@ public class TileMap {
     public int gety() {return (int)y;}
     public int getWidth() {return width;}
     public int getHeight() {return height;}
+    public int getNumRows() {return numRows;}
+    public int getNumCols() {return numCols;}
 
     public int getType(int row, int col)
     {
