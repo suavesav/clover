@@ -84,6 +84,10 @@ public class TileMap {
             map = new int[numRows][numCols];
             width = numCols * tileSize;
             height = numRows * tileSize;
+            xmin = GamePanel.WIDTH - width;
+            xmax = 0;
+            ymin = GamePanel.HEIGHT - height;
+            ymax = 0;
 
             String delimiters = "\\s+";
             for(int row = 0; row < numRows; row++)
@@ -98,6 +102,7 @@ public class TileMap {
         }
         catch(Exception E)
         {
+            System.out.println("Exception in loading the map");
             E.printStackTrace();
         }
     }

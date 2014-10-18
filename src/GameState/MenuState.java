@@ -37,6 +37,7 @@ public class MenuState extends GameState {
         }
         catch(Exception e)
         {
+            System.out.println("Exception in Setting Background");
             e.printStackTrace();
         }
     }

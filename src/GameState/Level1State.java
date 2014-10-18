@@ -1,7 +1,9 @@
 package GameState;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
+import Entity.Player;
 import Main.GamePanel;
 import TileMap.*;
 
@@ -12,6 +14,7 @@ public class Level1State extends GameState {
 
     private TileMap tileMap;
     private Background bg;
+    private Player player;
 
     public Level1State(GameStateManager gsm)
     {
@@ -27,10 +30,25 @@ public class Level1State extends GameState {
 
         //TODO maybe change background - No back on level yet, figure out bug?
         bg = new Background("/Backgrounds/menubg.png", 0.1);
+        player = new Player(tileMap);
+        //player.setPosition(100,100);
     }
 
     public void update()
-    {}
+    {
+        try
+        {
+            //System.out.println("Updating Player");
+            player.update();
+            //System.out.println("Player Updated");
+            tileMap.setPosition(GamePanel.WIDTH/2 - player.getx(), GamePanel.HEIGHT/2 - player.gety());
+        }
+        catch(Exception E)
+        {
+            System.out.println("Exception in updating the player");
+            E.printStackTrace();
+        }
+    }
 
     public void draw(Graphics2D gr)
     {
@@ -43,11 +61,40 @@ public class Level1State extends GameState {
 
         //Draw Map
         tileMap.draw(gr);
+
+        //Draw Player
+        player.draw(gr);
     }
 
     public void keyPressed(int k)
-    {}
+    {
+        if(k == KeyEvent.VK_LEFT)
+            player.setLeft(true);
+        if(k == KeyEvent.VK_RIGHT)
+            player.setRight(true);
+        if(k == KeyEvent.VK_UP)
+        {
+            player.setUp(true);
+            player.setJumping(true);
+        }
+        if(k == KeyEvent.VK_LEFT)
+            player.setDown(true);
+        if(k ==KeyEvent.VK_S)
+            player.setAttacking();
+    }
 
     public void keyReleased(int k)
-    {}
+    {
+        if(k == KeyEvent.VK_LEFT)
+            player.setLeft(false);
+        if(k == KeyEvent.VK_RIGHT)
+            player.setRight(false);
+        if(k == KeyEvent.VK_UP)
+        {
+            player.setUp(false);
+            player.setJumping(false);
+        }
+        if(k == KeyEvent.VK_LEFT)
+            player.setDown(false);
+    }
 }

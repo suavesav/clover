@@ -15,8 +15,9 @@ public class Animation {
     //If already played
     private boolean played;
 
-    public void Animation()
+    public Animation()
     {
+        //System.out.println("Animation Constructor");
         played = false;
     }
 
@@ -39,7 +40,8 @@ public class Animation {
     {
         if (delay==-1)
             return;
-        long elapsed = System.nanoTime()/1000000;
+
+        long elapsed = (System.nanoTime()-startTime)/1000000;
         if(elapsed > delay)
         {
             currentFrame++;

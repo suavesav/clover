@@ -57,9 +57,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_3BYTE_BGR);
         gr = (Graphics2D) image.getGraphics();
         running = true;
-
         gsm = new GameStateManager();
-
     }
 
     //
@@ -84,6 +82,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             elapsed = System.nanoTime() - start;
             //targetTime is in ns but elapsed is in ms so /1000000
             wait = targetTime - elapsed/1000000;
+            if(wait < 0)
+                wait = 0;
 
             try
             {
@@ -92,15 +92,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             catch (Exception e)
             {
                 //Black screen without this line ALWAYS DO THIS WHEN CATCHING EXCEPTIONS
+                System.out.println("Exception in Thread sleep");
                 e.printStackTrace();
             }
         }
     }
 
-    private void update()
-    {
-        gsm.update();
-    }
+    private void update() {gsm.update();}
 
     private void draw()
     {
