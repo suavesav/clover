@@ -86,7 +86,7 @@ public class Level1State extends GameState {
             player.setJumping(true);
         if(k == KeyEvent.VK_LEFT)
             player.setDown(true);
-        if(k ==KeyEvent.VK_S)
+        if(k == KeyEvent.VK_S)
             player.setAttacking();
     }
 

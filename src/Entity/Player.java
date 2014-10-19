@@ -21,6 +21,7 @@ public class Player extends MapObject {
     //Attack
     private boolean attacking;
     private int attackDamage;
+    private ArrayList<PlayerAttack> playerAttack;
 
     private ArrayList<BufferedImage[]> sprites;
     private final int[] numFrames = {2, 8};
@@ -52,6 +53,7 @@ public class Player extends MapObject {
         attack = 5000;
         maxAttack = 5000;
         attackDamage = 5;
+        playerAttack = new ArrayList<PlayerAttack>();
 
         //Load Sprites
         try
@@ -105,6 +107,27 @@ public class Player extends MapObject {
         //System.out.println("Setting Position...");
         setPosition(xtemp, ytemp);
 
+        attack +=1;
+        if(attack>maxAttack)
+            attack = maxAttack;
+
+        if(attacking)
+        {
+            PlayerAttack pa = new PlayerAttack(tileMap, facingRight);
+            pa.setPosition(x,y);
+            playerAttack.add(pa);
+            attacking = false;
+        }
+
+        for(int i = 0; i < playerAttack.size(); i++)
+        {
+            playerAttack.get(i).update();
+            if(playerAttack.get(i).getRemove())
+            {
+                playerAttack.remove(i);
+                i--;
+            }
+        }
         //Movement Animation
         //System.out.println("Creating Animation");
         if(left || right || jumping)
@@ -194,6 +217,10 @@ public class Player extends MapObject {
     {
 
         setMapPosition();
+        for(int i = 0; i<playerAttack.size(); i++)
+        {
+            playerAttack.get(i).draw(gr);
+        }
         System.out.printf("%d, %d, %d, %d\n", (int)x, (int)xmap, (int)y, (int)ymap);
         if(facingRight)
             gr.drawImage(animation.getImage(),(int)(x + xmap - width/2), (int)(y + ymap - height/2), null);
