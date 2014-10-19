@@ -32,8 +32,6 @@ public class MenuState extends GameState {
             titleColor = new Color(128, 0, 0);
             titleFont = new Font("Century Gothic", Font.PLAIN, 28);
             font = new Font("Arial", Font.PLAIN, 12);
-
-
         }
         catch(Exception e)
         {

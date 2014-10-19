@@ -10,7 +10,7 @@ public class Tile {
     private int type;
 
     public static final int NORMAL = 0;
-    public static final int BLOCKED = 0;
+    public static final int BLOCKED = 1;
 
     public Tile(BufferedImage image, int type)
     {

@@ -31,11 +31,12 @@ public class Level1State extends GameState {
         //TODO maybe change background - No back on level yet, figure out bug?
         bg = new Background("/Backgrounds/menubg.png", 0.1);
         player = new Player(tileMap);
-        //player.setPosition(100,100);
+        player.setPosition(100,100);
     }
 
     public void update()
     {
+
         try
         {
             //System.out.println("Updating Player");
@@ -48,6 +49,7 @@ public class Level1State extends GameState {
             System.out.println("Exception in updating the player");
             E.printStackTrace();
         }
+
     }
 
     public void draw(Graphics2D gr)
@@ -59,11 +61,19 @@ public class Level1State extends GameState {
         //Draw BackGrounds
         //bg.draw(gr);
 
-        //Draw Map
-        tileMap.draw(gr);
+        try
+        {
+            //Draw Map
+            tileMap.draw(gr);
 
-        //Draw Player
-        player.draw(gr);
+            //Draw Player
+            player.draw(gr);
+        }
+        catch (Exception E)
+        {
+            System.out.println("Exception while drawing things in Level1State: ");
+            E.printStackTrace();
+        }
     }
 
     public void keyPressed(int k)
@@ -74,8 +84,8 @@ public class Level1State extends GameState {
             player.setRight(true);
         if(k == KeyEvent.VK_UP)
         {
-            player.setUp(true);
             player.setJumping(true);
+            System.out.printf("jumping = %b", player.getJumping());
         }
         if(k == KeyEvent.VK_LEFT)
             player.setDown(true);
@@ -90,10 +100,7 @@ public class Level1State extends GameState {
         if(k == KeyEvent.VK_RIGHT)
             player.setRight(false);
         if(k == KeyEvent.VK_UP)
-        {
-            player.setUp(false);
             player.setJumping(false);
-        }
         if(k == KeyEvent.VK_LEFT)
             player.setDown(false);
     }

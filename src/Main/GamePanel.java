@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         requestFocus();
     }
 
-    //Notify me that the game is ready to go
+    //Notify me that the game is ready to go - JPanel is done loading
     public void addNotify()
     {
         super.addNotify();
@@ -54,7 +54,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     //Will initialize everything
     private void init()
     {
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_3BYTE_BGR);
+        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         gr = (Graphics2D) image.getGraphics();
         running = true;
         gsm = new GameStateManager();
@@ -81,10 +81,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
             elapsed = System.nanoTime() - start;
             //targetTime is in ns but elapsed is in ms so /1000000
-            wait = targetTime - elapsed/1000000;
+            wait = targetTime - elapsed / 1000000;
             if(wait < 0)
                 wait = 0;
-
             try
             {
                 Thread.sleep(wait);

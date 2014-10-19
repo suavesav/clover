@@ -23,14 +23,15 @@ public class Player extends MapObject {
     private int attackDamage;
 
     private ArrayList<BufferedImage[]> sprites;
-    private final int[] numFrames = {6};
-    private static final int WALKING = 0;
+    private final int[] numFrames = {2, 8};
+    private static final int IDLE = 0;
+    private static final int WALKING = 1;
 
     public Player(TileMap tm)
     {
         super(tm);
         //System.out.println("Player Constructor");
-        //todo change width to 30
+        //todo change width to 24
         width = 30;
         height = 30;
         cwidth = 20;
@@ -42,6 +43,7 @@ public class Player extends MapObject {
         fallSpeed = 0.15;
         maxFallSpeed = 4.0;
         jumpStart = -4.8;
+        falling = false;
 
         facingRight = true;
 
@@ -54,14 +56,17 @@ public class Player extends MapObject {
         //Load Sprites
         try
         {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/player.png"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/playersprites.gif"));
             sprites = new ArrayList<BufferedImage[]>();
-            BufferedImage[] anim = new BufferedImage[6];
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < numFrames.length; i++)
             {
-                anim[i] = spritesheet.getSubimage(0, i*height, width, height);
+                BufferedImage[] anim = new BufferedImage[numFrames[i]];
+                for(int j = 0; j < numFrames[i]; j++)
+                {
+                    anim[j] = spritesheet.getSubimage(j*width, i*height, width, height);
+                }
+                sprites.add(anim);
             }
-            sprites.add(anim);
         }
         catch (Exception E)
         {
@@ -70,8 +75,9 @@ public class Player extends MapObject {
         }
 
         System.out.println(sprites.get(0).length);
+        System.out.println(sprites.get(1).length);
         animation = new Animation();
-        animation.setFrames(sprites.get(WALKING));
+        animation.setFrames(sprites.get(IDLE));
         animation.setDelay(400);
         System.out.println("Player Constructor DONE");
     }
@@ -83,7 +89,6 @@ public class Player extends MapObject {
     public int getMaxAttack() {return maxAttack;}
 
 
-    //Setters
     public void setAttacking()
     {
         attacking = true;
@@ -102,10 +107,26 @@ public class Player extends MapObject {
 
         //Movement Animation
         //System.out.println("Creating Animation");
-        animation.setFrames(sprites.get(WALKING));
-        animation.setDelay(40);
-        width = 24;
-
+        if(left || right || jumping)
+        {
+            if(currAction != WALKING)
+            {
+                currAction = WALKING;
+                animation.setFrames(sprites.get(WALKING));
+                animation.setDelay(40);
+                width = 30;
+            }
+        }
+        else
+        {
+            if(currAction != IDLE)
+            {
+                currAction = IDLE;
+                animation.setFrames(sprites.get(IDLE));
+                animation.setDelay(400);
+                width = 30;
+            }
+        }
         //System.out.println("Updating Animation");
         animation.update();
 
@@ -170,11 +191,14 @@ public class Player extends MapObject {
 
     public void draw(Graphics2D gr)
     {
+
         setMapPosition();
-        //System.out.printf("%d, %d, %d, %d", (int)x, (int)xmap, (int)y, (int)ymap);
+        System.out.printf("%d, %d, %d, %d", (int)x, (int)xmap, (int)y, (int)ymap);
         if(facingRight)
             gr.drawImage(animation.getImage(),(int)(x + xmap - width/2), (int)(y + ymap - height/2), null);
         else
-            gr.drawImage(animation.getImage(),(int)(x + xmap - width/2 + width), (int)(y + ymap - height/2), -width, height, null);
+            gr.drawImage(animation.getImage(),(int)(x + xmap - width/2 + width), (int)(y + ymap - height/2),
+                    -width, height, null);
+
     }
 }

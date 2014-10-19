@@ -53,7 +53,7 @@ public abstract class MapObject {
         tileSize = tm.getTileSize();
     }
 
-    public boolean collide(MapObject mo)
+    public boolean intersects(MapObject mo)
     {
         Rectangle r1 = getRectangle();
         Rectangle r2 = mo.getRectangle();
@@ -74,11 +74,13 @@ public abstract class MapObject {
         int bottomTile = (int)(y + cheight / 2 - 1) / tileSize;
 
         //Avoid out of bounds
-        if(topTile < 0 || bottomTile >= tileMap.getNumRows() ||
-                leftTile < 0 || rightTile >= tileMap.getNumCols()) {
+
+        if(topTile < 0 || bottomTile >= tileMap.getNumRows() || leftTile < 0 || rightTile >= tileMap.getNumCols())
+        {
             topLeft = topRight = bottomLeft = bottomRight = false;
             return;
         }
+
 
         //Getting the types of the tiles to see if it would be special
         int tl = tileMap.getType(topTile, leftTile);
@@ -108,11 +110,26 @@ public abstract class MapObject {
 
         //See if down is blocked
         calculateCorners(x, ydest);
+        //See if up is blocked
+        if(dy < 0)
+        {
+            if(topLeft || topRight)
+            {
+                //Block Player/Whatever Object from moving up
+                System.out.println("BLOCKED DETECTED");
+                dy=0;
+                ytemp = currRow * tileSize + cheight / 2;
+            }
+            else
+                ytemp += dy;
+        }
+
         if(dy > 0)
         {
             if(bottomLeft || bottomRight)
             {
                 //Block Player/Whatever Object from moving down
+                System.out.println("BLOCKED DETECTED");
                 dy=0;
                 falling = false;
                 ytemp = (currRow+1) * tileSize - cheight / 2;
@@ -121,39 +138,27 @@ public abstract class MapObject {
                 ytemp += dy;
         }
 
-        //See if up is blocked
-        if(dy < 0)
+        calculateCorners(xdest, y);
+        if(dx < 0)
         {
-            if(topLeft || topRight)
+            if(topLeft || bottomLeft)
             {
-                //Block Player/Whatever Object from moving up
-                dy=0;
-                ytemp = currRow * tileSize + cheight / 2;
+//                System.out.println("BLOCKED DETECTED");
+                dx=0;
+                xtemp = currCol * tileSize + cwidth / 2;
             }
             else
-                ytemp += dy;
+                xtemp += dx;
         }
-
-        calculateCorners(xdest, y);
 
         if(dx > 0)
         {
             if(topRight || bottomRight)
             {
                 //Block Player/Whatever Object from moving up
+//                System.out.println("BLOCKED DETECTED");
                 dx=0;
                 xtemp = (currCol+1) * tileSize - cwidth / 2;
-            }
-            else
-                xtemp += dx;
-        }
-
-        if(dx < 0)
-        {
-            if(topLeft || bottomLeft)
-            {
-                dx=0;
-                xtemp = currCol * tileSize + cwidth / 2;
             }
             else
                 xtemp += dx;
@@ -173,13 +178,16 @@ public abstract class MapObject {
                 || y+ymap+height < 0 || y+ymap-height > GamePanel.HEIGHT;
     }
 
+    //Getters
     public int getx() {return (int)x;}
     public int gety() {return (int)y;}
     public int getWidth() {return width;}
     public int getHeight() {return height;}
     public int getCwidth() {return cwidth;}
     public int getCheight() {return cheight;}
+    public boolean getJumping() {return jumping;}
 
+    //Setters
     public void setPosition(double x, double y)
     {
         this.x = x;

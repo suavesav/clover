@@ -5,7 +5,7 @@ package GameState;
  */
 
 import java.util.ArrayList;
-import java.awt.Graphics2D;
+//import java.awt.*;
 
 public class GameStateManager {
 
@@ -38,7 +38,7 @@ public class GameStateManager {
         gameStates.get(currentState).update();
     }
 
-    public void draw(Graphics2D gr)
+    public void draw(java.awt.Graphics2D gr)
     {
         gameStates.get(currentState).draw(gr);
     }
