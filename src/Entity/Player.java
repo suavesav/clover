@@ -43,7 +43,7 @@ public class Player extends MapObject {
         fallSpeed = 0.15;
         maxFallSpeed = 4.0;
         jumpStart = -4.8;
-        falling = false;
+        falling = true;
 
         facingRight = true;
 
@@ -180,6 +180,7 @@ public class Player extends MapObject {
 
         if(falling)
         {
+            dy += fallSpeed;
             if(dy > 0)
                 jumping = false;
 
@@ -193,7 +194,7 @@ public class Player extends MapObject {
     {
 
         setMapPosition();
-        System.out.printf("%d, %d, %d, %d", (int)x, (int)xmap, (int)y, (int)ymap);
+        System.out.printf("%d, %d, %d, %d\n", (int)x, (int)xmap, (int)y, (int)ymap);
         if(facingRight)
             gr.drawImage(animation.getImage(),(int)(x + xmap - width/2), (int)(y + ymap - height/2), null);
         else
