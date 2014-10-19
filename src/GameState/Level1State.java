@@ -83,10 +83,7 @@ public class Level1State extends GameState {
         if(k == KeyEvent.VK_RIGHT)
             player.setRight(true);
         if(k == KeyEvent.VK_UP)
-        {
             player.setJumping(true);
-            System.out.printf("jumping = %b", player.getJumping());
-        }
         if(k == KeyEvent.VK_LEFT)
             player.setDown(true);
         if(k ==KeyEvent.VK_S)
