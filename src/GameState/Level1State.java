@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import Entity.Player;
+import Entity.Enemy;
 import Main.GamePanel;
 import TileMap.*;
+import java.util.ArrayList;
 
 /**
  * Created by Sav on 10/13/14.
@@ -15,6 +17,7 @@ public class Level1State extends GameState {
     private TileMap tileMap;
     private Background bg;
     private Player player;
+    private ArrayList<Enemy> enemies;
 
     public Level1State(GameStateManager gsm)
     {
