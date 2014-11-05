@@ -17,6 +17,7 @@ public class Player extends MapObject {
     private int attack;
     private int maxAttack;
     private boolean dead;
+    private int points;
 
     //Attack
     private boolean attacking;
@@ -24,16 +25,17 @@ public class Player extends MapObject {
     private ArrayList<PlayerAttack> playerAttack;
 
     private ArrayList<BufferedImage[]> sprites;
-    private final int[] numFrames = {2, 8};
-    private static final int IDLE = 0;
-    private static final int WALKING = 1;
+//    private final int[] numFrames = {2, 8};
+    private final int[] numFrames = {6};
+//    private static final int IDLE = 0;
+    private static final int WALKING = 0;
 
     public Player(TileMap tm)
     {
         super(tm);
         //System.out.println("Player Constructor");
         //todo change width to 24
-        width = 30;
+        width = 24;
         height = 30;
         cwidth = 20;
         cheight = 20;
@@ -49,7 +51,7 @@ public class Player extends MapObject {
         facingRight = true;
 
         health = 20;
-        maxHealth = 20;
+        maxHealth = 40;
         attack = 5000;
         maxAttack = 5000;
         attackDamage = 5;
@@ -58,14 +60,14 @@ public class Player extends MapObject {
         //Load Sprites
         try
         {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/playersprites.gif"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/player.png"));
             sprites = new ArrayList<BufferedImage[]>();
             for(int i = 0; i < numFrames.length; i++)
             {
                 BufferedImage[] anim = new BufferedImage[numFrames[i]];
                 for(int j = 0; j < numFrames[i]; j++)
                 {
-                    anim[j] = spritesheet.getSubimage(j*width, i*height, width, height);
+                    anim[j] = spritesheet.getSubimage(i*width, j*height, width, height);
                 }
                 sprites.add(anim);
             }
@@ -77,9 +79,9 @@ public class Player extends MapObject {
         }
 
         System.out.println(sprites.get(0).length);
-        System.out.println(sprites.get(1).length);
+        //System.out.println(sprites.get(1).length);
         animation = new Animation();
-        animation.setFrames(sprites.get(IDLE));
+        animation.setFrames(sprites.get(WALKING));
         animation.setDelay(400);
         System.out.println("Player Constructor DONE");
     }
@@ -89,11 +91,50 @@ public class Player extends MapObject {
     public int getMaxHealth() {return maxHealth;}
     public int getAttack() {return attack;}
     public int getMaxAttack() {return maxAttack;}
+    public int getPoints() {return points;}
 
 
     public void setAttacking()
     {
         attacking = true;
+    }
+
+    public void checkAttack(ArrayList<Enemy> enemies)
+    {
+        for(int i = 0; i < enemies.size(); i++)
+        {
+            Enemy e = enemies.get(i);
+            for(int j = 0; j < playerAttack.size(); j++)
+            {
+                if(playerAttack.get(j).intersects(e))
+                {
+                    e.hit(attackDamage);
+                    playerAttack.get(j).setHit();
+                    break;
+                }
+            }
+
+            //Collision with Enemy
+            if(intersects(e))
+                hit(e.getDamage());
+        }
+    }
+
+    public void upHealth(int h)
+    {
+        health += h;
+        if(health > maxHealth)
+            health = maxHealth;
+    }
+
+    public void hit(int damage)
+    {
+        health -= damage;
+        if(health < 0)
+            health = 0;
+
+        if(health == 0)
+            dead = true;
     }
 
     //Update
@@ -137,17 +178,19 @@ public class Player extends MapObject {
                 currAction = WALKING;
                 animation.setFrames(sprites.get(WALKING));
                 animation.setDelay(40);
-                width = 30;
+                width = 24;
             }
         }
+
+        //IDLE ANIMATION WAS HERE
         else
         {
-            if(currAction != IDLE)
+            if(currAction != WALKING)
             {
-                currAction = IDLE;
-                animation.setFrames(sprites.get(IDLE));
+                currAction = WALKING;
+                animation.setFrames(sprites.get(WALKING));
                 animation.setDelay(400);
-                width = 30;
+                width = 24;
             }
         }
         //System.out.println("Updating Animation");
@@ -221,12 +264,11 @@ public class Player extends MapObject {
         {
             playerAttack.get(i).draw(gr);
         }
+
         System.out.printf("%d, %d, %d, %d\n", (int)x, (int)xmap, (int)y, (int)ymap);
-        if(facingRight)
-            gr.drawImage(animation.getImage(),(int)(x + xmap - width/2), (int)(y + ymap - height/2), null);
-        else
-            gr.drawImage(animation.getImage(),(int)(x + xmap - width/2 + width), (int)(y + ymap - height/2),
-                    -width, height, null);
+        super.draw(gr);
 
     }
+
+    public boolean getDead() {return dead;}
 }

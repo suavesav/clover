@@ -1,36 +1,30 @@
 package GameState;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
+import Main.GamePanel;
 import TileMap.Background;
 
-import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
- * Created by Sav on 10/12/14.
+ * Created by Sav on 10/22/14.
  */
-public class MenuState extends GameState {
+public class GameOverState extends GameState {
+    private int currentChoice = 0;
+    private String[] options = {"Reset", "Menu", "Quit"};
 
+    private Font font;
     private Background bg;
 
-    private int currentChoice = 0;
-    private String[] options = {"Start", "Help", "Quit"};
-
-    private Color titleColor;
-    private Font titleFont;
-    private Font font;
-
-    public MenuState(GameStateManager gsm)
+    public GameOverState(GameStateManager gsm)
     {
         this.gsm = gsm;
 
         try
         {
-            bg = new Background("/Backgrounds/menubg.png", 1);
+            bg = new Background("/Backgrounds/gameover_bg.jpeg", 1);
             bg.setVector(-0.1, 0);
 
-            titleColor = new Color(128, 0, 0);
-            titleFont = new Font("Century Gothic", Font.BOLD, 30);
             font = new Font("Arial", Font.PLAIN, 12);
         }
         catch(Exception e)
@@ -44,17 +38,15 @@ public class MenuState extends GameState {
     {}
 
     public void update()
-    {
-        bg.update();
-    }
+    {}
 
     public void draw(Graphics2D gr)
     {
+        //gr.setColor(Color.BLACK);
+        //gr.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+
         bg.draw(gr);
 
-        gr.setColor(titleColor);
-        gr.setFont(titleFont);
-        gr.drawString("Clover", 120, 70);
 
         gr.setFont(font);
         for(int i=0; i<options.length; i++)
@@ -65,10 +57,10 @@ public class MenuState extends GameState {
             }
             else
             {
-                gr.setColor(Color.BLACK);
+                gr.setColor(Color.YELLOW);
             }
 
-            gr.drawString(options[i], 145, 140+(i*15));
+            gr.drawString(options[i], 145, 200+(i*15));
 
         }
     }
@@ -82,7 +74,7 @@ public class MenuState extends GameState {
         }
         if (currentChoice == 1)
         {
-            //Help
+            gsm.setState(GameStateManager.MENUSTATE);
         }
         if (currentChoice == 2)
         {
@@ -90,6 +82,7 @@ public class MenuState extends GameState {
             System.exit(0);
         }
     }
+
     public void keyPressed(int k)
     {
         if(k == KeyEvent.VK_ENTER)

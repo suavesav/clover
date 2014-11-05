@@ -2,22 +2,23 @@ package Entity;
 
 import TileMap.TileMap;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 
 /**
- * Created by Sav on 10/19/14.
+ * Created by Sav on 10/24/14.
  */
-public class PlayerAttack extends MapObject{
+public class EnemyAttack extends MapObject{
 
     private boolean hit;
     private boolean remove;
     private BufferedImage[] sprites;
 
-    public PlayerAttack(TileMap tm, boolean right)
+    public EnemyAttack(TileMap tm, boolean right)
     {
         super(tm);
+
         width = 30;
         height = 30;
         cwidth = 15;
@@ -25,7 +26,7 @@ public class PlayerAttack extends MapObject{
 
         facingRight = right;
 
-        moveSpeed = 3.8;
+        moveSpeed = 3.0;
         if(right)
             dx = moveSpeed;
         else

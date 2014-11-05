@@ -12,6 +12,7 @@ public class Enemy extends MapObject {
     protected boolean dead;
     protected int damage;
     protected int attackDamage;
+    protected boolean attacking;
 
 
     public Enemy(TileMap tm)
@@ -36,4 +37,6 @@ public class Enemy extends MapObject {
         if(health == 0)
             dead = true;
     }
+
+    public void update() {}
 }

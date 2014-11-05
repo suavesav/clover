@@ -33,8 +33,8 @@ public class Animation {
     public BufferedImage getImage() {return frames[currentFrame];}
     public boolean getPlayed() {return played;}
 
-    void setDelay(long d) {delay = d;}
-    void setCurrentFrame(int i) {currentFrame = i;}
+    public void setDelay(long d) {delay = d;}
+    public void setCurrentFrame(int i) {currentFrame = i;}
 
     public void update()
     {
