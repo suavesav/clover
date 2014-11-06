@@ -154,8 +154,8 @@ public class FlyingGhost extends Enemy {
 
     public void draw(Graphics2D gr)
     {
-        if(objectNotOnScreen())
-            return;
+//        if(objectNotOnScreen())
+//            return;
 
         setMapPosition();
         super.draw(gr);
