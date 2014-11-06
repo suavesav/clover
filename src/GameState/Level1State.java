@@ -31,7 +31,7 @@ public class Level1State extends GameState {
     {
         tileMap = new TileMap(30);
         tileMap.loadTiles("/Tilesets/grasstileset.gif");
-        tileMap.loadMap("/Maps/level1-1.map");
+        tileMap.loadMap("/Maps/level1-2.map");
         tileMap.setPosition(0, 0);
 
         //TODO maybe change background - No back on level yet, figure out bug?
@@ -63,8 +63,6 @@ public class Level1State extends GameState {
             //System.out.println("Player Updated");
             tileMap.setPosition(GamePanel.WIDTH/2 - player.getx(), GamePanel.HEIGHT/2 - player.gety());
 
-            player.checkAttack(enemies);
-
             for(int i = 0; i<enemies.size(); i++)
             {
                 enemies.get(i).update();
@@ -74,8 +72,12 @@ public class Level1State extends GameState {
                     i--;
                     player.upHealth(10);
                 }
+                //enemies.get(i).checkAttack(player);
 
             }
+
+            player.checkAttack(enemies);
+
             if(player.getDead())
                 gsm.setState(GameStateManager.GAMEOVERSTATE);
         }
