@@ -120,6 +120,18 @@ public class Player extends MapObject {
         }
     }
 
+    public void checkPowerUp(ArrayList<PowerUp> powerups)
+    {
+        for(int i = 0; i < powerups.size(); i++)
+        {
+            if(intersects(powerups.get(i)))
+            {
+                upHealth(5);
+                powerups.get(i).setUsed();
+            }
+        }
+    }
+
     public void upHealth(int h)
     {
         health += h;

@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent;
 import Entity.Entity.Enemies.FlyingGhost;
 import Entity.Player;
 import Entity.Enemy;
+import Entity.PowerUp;
+import Entity.Entity.PowerUps.Mushroom;
 import Main.GamePanel;
 import TileMap.*;
 import java.util.ArrayList;
@@ -20,7 +22,10 @@ public class Level1State extends GameState {
     private Background bg;
     private Player player;
     private ArrayList<Enemy> enemies;
+    private ArrayList<PowerUp> powerups;
     private HUD hud;
+    private long start;
+    private long elapsed;
 
     public Level1State(GameStateManager gsm)
     {
@@ -40,10 +45,21 @@ public class Level1State extends GameState {
         player.setPosition(100,100);
 
         populateEnemies();
+        populatePowerUps();
 
         hud = new HUD(player);
+        start = System.nanoTime();
     }
 
+    private void populatePowerUps()
+    {
+        powerups = new ArrayList<PowerUp>();
+
+        Mushroom mush;
+        mush = new Mushroom(tileMap);
+        mush.setPosition(220, 100);
+        powerups.add(mush);
+    }
     private void populateEnemies()
     {
         enemies = new ArrayList<Enemy>();
@@ -58,6 +74,8 @@ public class Level1State extends GameState {
     {
         try
         {
+            elapsed = System.nanoTime() - start;
+            System.out.println(elapsed);
             //System.out.println("Updating Player");
             player.update();
             //System.out.println("Player Updated");
@@ -75,7 +93,16 @@ public class Level1State extends GameState {
                 //enemies.get(i).checkAttack(player);
 
             }
-
+            for(int j = 0; j<powerups.size(); j++)
+            {
+                powerups.get(j).update();
+                if(powerups.get(j).getUsed())
+                {
+                    powerups.remove(j);
+                    j--;
+                }
+            }
+            player.checkPowerUp(powerups);
             player.checkAttack(enemies);
 
             if(player.getDead())
@@ -109,6 +136,11 @@ public class Level1State extends GameState {
             for(int i = 0; i<enemies.size(); i++)
             {
                 enemies.get(i).draw(gr);
+            }
+
+            for(int i = 0; i<powerups.size(); i++)
+            {
+                powerups.get(i).draw(gr);
             }
 
             hud.draw(gr);

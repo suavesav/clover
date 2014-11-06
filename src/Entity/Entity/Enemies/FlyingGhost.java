@@ -66,8 +66,8 @@ public class FlyingGhost extends Enemy {
         animation.setDelay(400);
         System.out.println("Player Constructor DONE");
 
-        right = true;
-        facingRight = true;
+        left = true;
+        facingRight = false;
     }
 
     private void getNextPosition()
