@@ -216,8 +216,11 @@ public class Level1State extends GameState {
         if(k == KeyEvent.VK_LEFT)
             player.setDown(true);
         if(k == KeyEvent.VK_S && !player.getSuperAttack() && !skeypressed) {
-            player.setAttacking();
-            skeystart = System.nanoTime();
+            if(!skeypressed)
+            {
+                player.setAttacking();
+                skeystart = System.nanoTime();
+            }
             skeypressed = true;
         }
         if(k == KeyEvent.VK_R)
