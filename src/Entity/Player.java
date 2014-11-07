@@ -213,7 +213,7 @@ public class Player extends MapObject {
             superAttack();
         }
 
-        if(xcount>30 || xcount < -30)
+        if(xcount>40 || xcount < -40)
         {
             xcount = 0;
             upHealth(1);

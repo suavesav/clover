@@ -73,6 +73,7 @@ public class Level1State extends GameState {
         fg2 = new FlyingGhost(tileMap);
         fg2.setPosition(823, 100);
         enemies.add(fg2);
+
     }
 
     public void update()

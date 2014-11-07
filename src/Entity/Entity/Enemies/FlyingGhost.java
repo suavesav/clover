@@ -110,7 +110,7 @@ public class FlyingGhost extends Enemy {
         checkTileCollision();
         setPosition(xtemp, ytemp);
 
-        if(elapsed > 500 && !startedShooting)
+        if((elapsed > 500 || xcount > 80 || xcount < -80) && !startedShooting)
         {
             setAttacking();
             start = System.nanoTime();
