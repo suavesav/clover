@@ -39,6 +39,7 @@ public class Player extends MapObject {
 //    private static final int IDLE = 0;
     private static final int WALKING = 0;
     private boolean attackSoundPlayed;
+    private long shoottimer;
 
     public Player(TileMap tm)
     {
@@ -72,6 +73,7 @@ public class Player extends MapObject {
 
         xcount = 0;
         attackSoundPlayed = true;
+        shoottimer = System.nanoTime();
 
 
         //Load Sprites
@@ -216,11 +218,15 @@ public class Player extends MapObject {
 
         if(attacking)
         {
-            PlayerAttack pa = new PlayerAttack(tileMap, facingRight);
-            pa.setPosition(x,y);
-            playerAttack.add(pa);
-            attacking = false;
-            attackSoundPlayed = false;
+            if((System.nanoTime() - shoottimer)/1000000 > 500)
+            {
+                PlayerAttack pa = new PlayerAttack(tileMap, facingRight);
+                pa.setPosition(x,y);
+                playerAttack.add(pa);
+                attacking = false;
+                attackSoundPlayed = false;
+                shoottimer = System.nanoTime();
+            }
         }
 
         if(superAttackVar)
