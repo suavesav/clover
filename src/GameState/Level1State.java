@@ -88,14 +88,16 @@ public class Level1State extends GameState {
 
             for(int i = 0; i<enemies.size(); i++)
             {
-                enemies.get(i).update();
-                if(enemies.get(i).getDead())
+                Enemy e = enemies.get(i);
+                e.update();
+                if(e.getDead())
                 {
                     enemies.remove(i);
                     i--;
                     player.upHealth(10);
                 }
-                //enemies.get(i).checkAttack(player);
+                enemies.get(i).checkAttack(player);
+
 
             }
             for(int j = 0; j<powerups.size(); j++)

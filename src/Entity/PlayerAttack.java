@@ -65,6 +65,7 @@ public class PlayerAttack extends MapObject{
     public void update()
     {
         checkTileCollision();
+
         setPosition(xtemp, ytemp);
 
         animation.update();

@@ -18,11 +18,11 @@ public class Enemy extends MapObject {
     protected boolean attacking;
 
 
-//    private ArrayList<PlayerAttack> enemyAttack;
+    protected ArrayList<EnemyAttack> enemyAttack;
 
     public Enemy(TileMap tm) {
         super(tm);
-//        enemyAttack = new ArrayList<PlayerAttack>();
+        enemyAttack = new ArrayList<EnemyAttack>();
     }
 
     public boolean getDead() {
@@ -54,18 +54,19 @@ public class Enemy extends MapObject {
             dead = true;
     }
 
-//    public void checkAttack(Player player)
-//    {
-//        for (int j = 0; j < enemyAttack.size(); j++)
-//        {
-//            if (enemyAttack.get(j).intersects(player))
-//            {
-//                player.hit(attackDamage);
-//                enemyAttack.get(j).setHit();
-//                break;
-//            }
-//        }
-//    }
+
+    public void checkAttack(Player player)
+    {
+        for (int j = 0; j < enemyAttack.size(); j++)
+        {
+            if (enemyAttack.get(j).intersects(player))
+            {
+                player.hit(attackDamage);
+                enemyAttack.get(j).setHit();
+                break;
+            }
+        }
+    }
 
     public void update()
     {}
@@ -75,3 +76,5 @@ public class Enemy extends MapObject {
         super.draw(gr);
     }
 }
+
+

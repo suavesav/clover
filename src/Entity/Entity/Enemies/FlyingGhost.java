@@ -23,7 +23,7 @@ public class FlyingGhost extends Enemy {
     private long start;
     private long elapsed;
     private boolean startedShooting;
-    private ArrayList<PlayerAttack> enemyAttack;
+//    private ArrayList<EnemyAttack> enemyAttack;
 
     public FlyingGhost(TileMap tm)
     {
@@ -36,14 +36,14 @@ public class FlyingGhost extends Enemy {
         maxFallSpeed = 10.0;
         width = 30;
         height = 30;
-        cwidth = 10;
-        cheight = 10;
+        cwidth = 20;
+        cheight = 20;
 
         health = 10;
         maxHealth = 10;
         damage = 40;
         attackDamage = 5;
-        enemyAttack = new ArrayList<PlayerAttack>();
+//        enemyAttack = new ArrayList<EnemyAttack>();
 
         try
         {
@@ -122,6 +122,16 @@ public class FlyingGhost extends Enemy {
             start = System.nanoTime();
         }
 
+        for(int i = 0; i < enemyAttack.size(); i++)
+        {
+            enemyAttack.get(i).update();
+            if(enemyAttack.get(i).getRemove())
+            {
+                enemyAttack.remove(i);
+                i--;
+            }
+        }
+
         if(right && dx==0)
         {
             right = false;
@@ -141,9 +151,10 @@ public class FlyingGhost extends Enemy {
 
         if(currAction == ATTACKING)
         {
-            PlayerAttack ea = new PlayerAttack(tileMap, facingRight);
+            EnemyAttack ea = new EnemyAttack(tileMap, facingRight);
             ea.setPosition(x,y);
             enemyAttack.add(ea);
+            attacking = false;
             if (animation.getPlayed())
                 attacking = false;
 

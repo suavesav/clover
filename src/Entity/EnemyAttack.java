@@ -26,7 +26,7 @@ public class EnemyAttack extends MapObject{
 
         facingRight = right;
 
-        moveSpeed = 3.0;
+        moveSpeed = 2.5;
         if(right)
             dx = moveSpeed;
         else
@@ -65,8 +65,10 @@ public class EnemyAttack extends MapObject{
 
     public void update()
     {
+
         checkTileCollision();
         setPosition(xtemp, ytemp);
+
 
         animation.update();
 
