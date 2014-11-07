@@ -60,6 +60,11 @@ public class PlayerAttack extends MapObject{
         dx = 0;
     }
 
+    public boolean getHit()
+    {
+        return hit;
+    }
+
     public boolean getRemove() {return remove;}
 
     public void update()
