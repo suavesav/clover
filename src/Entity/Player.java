@@ -18,6 +18,10 @@ public class Player extends MapObject {
     private int maxAttack;
     private boolean dead;
     private int points;
+    public long saStart;
+    public long saElapsed;
+    private int saCount;
+    private boolean superAttackVar;
 
     //Attack
     private boolean attacking;
@@ -56,6 +60,10 @@ public class Player extends MapObject {
         maxAttack = 5000;
         attackDamage = 5;
         playerAttack = new ArrayList<PlayerAttack>();
+        superAttackVar = false;
+        saCount = 0;
+
+        xcount = 0;
 
         //Load Sprites
         try
@@ -97,6 +105,34 @@ public class Player extends MapObject {
     public void setAttacking()
     {
         attacking = true;
+    }
+
+    public void setSuperAttack()
+    {
+        superAttackVar = true;
+    }
+
+    public boolean getSuperAttack()
+    {
+        return superAttackVar;
+    }
+
+    public void superAttack()
+    {
+        saElapsed = System.nanoTime() - saStart;
+        saElapsed /= 1000000;
+
+        if((saCount==0) || (saCount<10 && saElapsed>1000))
+        {
+            setAttacking();
+            saCount++;
+            saStart = System.nanoTime();
+        }
+        else if(saCount == 10)
+        {
+            saCount = 0;
+            superAttackVar = false;
+        }
     }
 
     public void checkAttack(ArrayList<Enemy> enemies)
@@ -172,6 +208,17 @@ public class Player extends MapObject {
             attacking = false;
         }
 
+        if(superAttackVar)
+        {
+            superAttack();
+        }
+
+        if(xcount>30 || xcount < -30)
+        {
+            xcount = 0;
+            upHealth(1);
+        }
+
         for(int i = 0; i < playerAttack.size(); i++)
         {
             playerAttack.get(i).update();
@@ -225,12 +272,14 @@ public class Player extends MapObject {
         if(left)
         {
             dx-=moveSpeed;
+            xcount -= dx;
             if (dx < -maxSpeed)
                 dx = -maxSpeed;
         }
         else if(right)
         {
             dx+=moveSpeed;
+            xcount+=dx;
             if(dx > maxSpeed)
                 dx = maxSpeed;
         }
@@ -239,12 +288,14 @@ public class Player extends MapObject {
             if(dx > 0)
             {
                 dx-=stopSpeed;
+                xcount-=dx;
                 if(dx < 0)
                     dx = 0;
             }
             else if(dx < 0)
             {
                 dx+=stopSpeed;
+                xcount  += dx;
                 if(dx > 0)
                     dx = 0;
             }

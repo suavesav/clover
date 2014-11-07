@@ -24,8 +24,8 @@ public class Level1State extends GameState {
     private ArrayList<Enemy> enemies;
     private ArrayList<PowerUp> powerups;
     private HUD hud;
-    private long start;
-    private long elapsed;
+    private long skeystart;
+    private long skeyelapsed;
 
     public Level1State(GameStateManager gsm)
     {
@@ -48,7 +48,7 @@ public class Level1State extends GameState {
         populatePowerUps();
 
         hud = new HUD(player);
-        start = System.nanoTime();
+//        start = System.nanoTime();
     }
 
     private void populatePowerUps()
@@ -79,7 +79,7 @@ public class Level1State extends GameState {
     {
         try
         {
-            elapsed = System.nanoTime() - start;
+//            elapsed = System.nanoTime() - start;
 //            System.out.println(elapsed);
             //System.out.println("Updating Player");
             player.update();
@@ -111,6 +111,7 @@ public class Level1State extends GameState {
             }
             player.checkPowerUp(powerups);
             player.checkAttack(enemies);
+
 
             if(player.getDead())
                 gsm.setState(GameStateManager.GAMEOVERSTATE);
@@ -170,8 +171,10 @@ public class Level1State extends GameState {
             player.setJumping(true);
         if(k == KeyEvent.VK_LEFT)
             player.setDown(true);
-        if(k == KeyEvent.VK_S)
+        if(k == KeyEvent.VK_S && !player.getSuperAttack()) {
             player.setAttacking();
+            skeystart = System.nanoTime();
+        }
         if(k == KeyEvent.VK_R)
             gsm.setState(GameStateManager.LEVEL1STATE);
     }
@@ -186,5 +189,15 @@ public class Level1State extends GameState {
             player.setJumping(false);
         if(k == KeyEvent.VK_LEFT)
             player.setDown(false);
+        if(k == KeyEvent.VK_S)
+        {
+            skeyelapsed = System.nanoTime() - skeystart;
+            skeyelapsed /= 1000000;
+            if(skeyelapsed > 2000)
+            {
+                player.setSuperAttack();
+//                System.out.println("SuperAttack is true");
+            }
+        }
     }
 }
