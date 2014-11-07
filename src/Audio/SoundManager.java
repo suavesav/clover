@@ -195,7 +195,7 @@ public class SoundManager extends ThreadPool {
      Plays a sound. This method returns immediately.
      */
     public InputStream play(Sound sound) {
-        return play(sound, null, false);
+//        return play(sound, null, false);
     }
 
 
@@ -205,7 +205,7 @@ public class SoundManager extends ThreadPool {
      returns immediately.
      */
     public InputStream play(InputStream is) {
-        return play(is, null);
+//        return play(is, null);
     }
 
 

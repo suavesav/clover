@@ -29,6 +29,7 @@ public abstract class MapObject {
     protected int currRow, currCol;
     protected double xdest, ydest;
     protected double xtemp, ytemp;
+    protected double xcount, ycount;
     protected boolean topLeft, topRight, bottomLeft, bottomRight;
 
     //Animation
