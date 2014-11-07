@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import Audio.SoundPlayer;
+
 
 public class Player extends MapObject {
     private int health;
@@ -18,6 +20,8 @@ public class Player extends MapObject {
     private int maxAttack;
     private boolean dead;
     private int points;
+
+    private SoundPlayer attacksound;
 
     //Attack
     private boolean attacking;
@@ -56,7 +60,7 @@ public class Player extends MapObject {
         maxAttack = 5000;
         attackDamage = 5;
         playerAttack = new ArrayList<PlayerAttack>();
-
+        attacksound = new SoundPlayer("./Resource/Sounds/fire.wav");
         //Load Sprites
         try
         {
@@ -170,6 +174,7 @@ public class Player extends MapObject {
             pa.setPosition(x,y);
             playerAttack.add(pa);
             attacking = false;
+            attacksound.play(attacksound.samples); //play sound
         }
 
         for(int i = 0; i < playerAttack.size(); i++)

@@ -5,21 +5,21 @@ import javax.sound.sampled.*;
 
 
 public class SoundPlayer {
-	public static void main(String[] args) {
-		SoundPlayer sound = new SoundPlayer("./src/Audio/jumpsound.aiff");
-		InputStream stream = new ByteArrayInputStream(sound.getSamples());
-		sound.play(stream);
-	}
+//	public static void main(String[] args) {
+//		SoundPlayer sound = new SoundPlayer("./Resources/Sounds/jumpsound.aiff");
+//		InputStream stream = new ByteArrayInputStream(sound.getSamples());
+//		sound.play(stream);
+//	}
 
 
-	
+	public AudioInputStream ais;
 	public AudioFormat format;
-	private byte[] samples;
+	public byte[] samples;
 	
 	public SoundPlayer(String filename){
 		try{
-		//	AudioInputStream stream = AudioSystem.get(getClass().getResourceAsStream(filename));
 			AudioInputStream stream = AudioSystem.getAudioInputStream(new File(filename));
+			ais = stream;
 			format = stream.getFormat();
 			samples = getSamples(stream);
 		}
@@ -50,10 +50,16 @@ public class SoundPlayer {
 		return samples;
 	}
 	
-	public void play(InputStream source){
+	public void play(byte[] samp){ //InputStream source
+
+		InputStream source = new ByteArrayInputStream(samp);
+
 		int bufferSize = format.getFrameSize()*Math.round(format.getSampleRate()/10);
 		byte[] buffer = new byte[bufferSize];
 		SourceDataLine line;
+
+
+
 		try {
 			DataLine.Info info = 
 					new DataLine.Info(SourceDataLine.class, format);
