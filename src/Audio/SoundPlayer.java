@@ -5,21 +5,19 @@ import javax.sound.sampled.*;
 
 
 public class SoundPlayer {
-//	public static void main(String[] args) {
-//		SoundPlayer sound = new SoundPlayer("./Resources/Sounds/jumpsound.aiff");
-//		InputStream stream = new ByteArrayInputStream(sound.getSamples());
-//		sound.play(stream);
-//	}
 
 
-	public AudioInputStream ais;
+
+	//public AudioInputStream ais;
 	public AudioFormat format;
-	public byte[] samples;
+	private byte[] samples;
+	//public String filepath;
 	
 	public SoundPlayer(String filename){
+		//this.filepath = filename;
 		try{
 			AudioInputStream stream = AudioSystem.getAudioInputStream(new File(filename));
-			ais = stream;
+			//ais = stream;
 			format = stream.getFormat();
 			samples = getSamples(stream);
 		}
@@ -30,7 +28,12 @@ public class SoundPlayer {
 			ex.printStackTrace();
 		}
 	}
-	
+
+	public void playSound(String filename) {
+		SoundPlayer sound = new SoundPlayer(filename);
+		InputStream stream = new ByteArrayInputStream(sound.getSamples());
+		sound.play(stream);
+	}
 	
 	public byte[] getSamples(){
 		return samples;
@@ -50,9 +53,9 @@ public class SoundPlayer {
 		return samples;
 	}
 	
-	public void play(byte[] samp){ //InputStream source
+	public void play(InputStream source){ //InputStream source
 
-		InputStream source = new ByteArrayInputStream(samp);
+		//InputStream source = new ByteArrayInputStream(samp);
 
 		int bufferSize = format.getFrameSize()*Math.round(format.getSampleRate()/10);
 		byte[] buffer = new byte[bufferSize];
@@ -67,6 +70,7 @@ public class SoundPlayer {
 			line.open(format,bufferSize);
 		}
 		catch (LineUnavailableException ex){
+			System.out.println("Line Unavailable Exception in play(InputStream source)");
 			ex.printStackTrace();
 			return;
 			
@@ -82,7 +86,8 @@ public class SoundPlayer {
 				}
 			}
 		}
-		catch (IOException ex) {
+		catch (Exception ex) {
+			System.out.println("Exception thrown in play(InputStream source)");
 			ex.printStackTrace();
 		}
 		//wait until all data is played
