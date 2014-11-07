@@ -28,6 +28,7 @@ public class Level1State extends GameState {
     private HUD hud;
     private long skeystart;
     private long skeyelapsed;
+    private boolean skeypressed;
 
     //SOUNDS
     // uncompressed, 44100Hz, 16-bit, mono, signed, little-endian
@@ -214,9 +215,10 @@ public class Level1State extends GameState {
             player.setJumping(true);
         if(k == KeyEvent.VK_LEFT)
             player.setDown(true);
-        if(k == KeyEvent.VK_S && !player.getSuperAttack()) {
+        if(k == KeyEvent.VK_S && !player.getSuperAttack() && !skeypressed) {
             player.setAttacking();
             skeystart = System.nanoTime();
+            skeypressed = true;
         }
         if(k == KeyEvent.VK_R)
             gsm.setState(GameStateManager.LEVEL1STATE);
@@ -234,6 +236,7 @@ public class Level1State extends GameState {
             player.setDown(false);
         if(k == KeyEvent.VK_S)
         {
+            skeypressed = false;
             skeyelapsed = System.nanoTime() - skeystart;
             skeyelapsed /= 1000000;
             if(skeyelapsed > 2000)
