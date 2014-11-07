@@ -133,8 +133,11 @@ public class Level1State extends GameState {
             player.checkAttack(enemies);
             for(int i = 0; i<player.playerAttack.size(); i++)
             {
-                if(player.playerAttack.get(i).getHit() == true)
+                if(player.playerAttack.get(i).getHit() == true && !player.playerAttack.get(i).getHitSoundPlayed())
+                {
                     soundManager.play(hit);
+                    player.playerAttack.get(i).setHitSoundPlayed();
+                }
             }
             if(!player.getAttackSoundPlayed())
             {

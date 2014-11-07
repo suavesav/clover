@@ -13,6 +13,7 @@ public class PlayerAttack extends MapObject{
 
     private boolean hit;
     private boolean remove;
+    private boolean hitSoundPlayed;
     private BufferedImage[] sprites;
 
     public PlayerAttack(TileMap tm, boolean right)
@@ -24,6 +25,7 @@ public class PlayerAttack extends MapObject{
         cheight = 15;
 
         facingRight = right;
+        hitSoundPlayed = false;
 
         moveSpeed = 3.8;
         if(right)
@@ -59,6 +61,10 @@ public class PlayerAttack extends MapObject{
         hit = true;
         dx = 0;
     }
+
+    public boolean getHitSoundPlayed() {return hitSoundPlayed;}
+
+    public void setHitSoundPlayed() {hitSoundPlayed = true;}
 
     public boolean getHit()
     {
