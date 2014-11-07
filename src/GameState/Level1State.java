@@ -64,9 +64,9 @@ public class Level1State extends GameState {
     }
     public void initSounds() { //initialize sound variables
         soundManager = new SoundManager(PLAYBACK_FORMAT);
-        fire = soundManager.getSound("./Resources/Sounds/fire.wav");
+        fire = soundManager.getSound("./Resources/Sounds/fire2.wav");
         die = soundManager.getSound("./Resources/Sounds/jumpsound.aiff");
-        hit = soundManager.getSound("./Resources/Sounds/highsound.aiff");
+        hit = soundManager.getSound("./Resources/Sounds/hit.wav");
     }
 
     private void populatePowerUps()
