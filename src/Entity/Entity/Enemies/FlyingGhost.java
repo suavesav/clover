@@ -20,10 +20,16 @@ public class FlyingGhost extends Enemy {
     private static final int ATTACKING = 1;
     private static final int DEAD = 2;
 
+    private long start;
+    private long elapsed;
+    private boolean startedShooting;
+    private ArrayList<PlayerAttack> enemyAttack;
+
     public FlyingGhost(TileMap tm)
     {
         super(tm);
 
+        start = System.nanoTime();
         moveSpeed = 0.3;
         maxSpeed = 0.9;
         fallSpeed = 0.3;
@@ -37,6 +43,7 @@ public class FlyingGhost extends Enemy {
         maxHealth = 10;
         damage = 40;
         attackDamage = 5;
+        enemyAttack = new ArrayList<PlayerAttack>();
 
         try
         {
@@ -95,9 +102,25 @@ public class FlyingGhost extends Enemy {
 
     public void update()
     {
+        elapsed = System.nanoTime() - start;
+        elapsed /= 1000000;
+        System.out.println(elapsed);
+
         getNextPosition();
         checkTileCollision();
         setPosition(xtemp, ytemp);
+
+        if(elapsed > 500 && !startedShooting)
+        {
+            setAttacking();
+            start = System.nanoTime();
+            startedShooting = true;
+        }
+        if(elapsed>2000 && startedShooting)
+        {
+            setAttacking();
+            start = System.nanoTime();
+        }
 
         if(right && dx==0)
         {
@@ -115,9 +138,16 @@ public class FlyingGhost extends Enemy {
         if(currAction == DEAD)
             if(animation.getPlayed())
                 dead = false;
+
         if(currAction == ATTACKING)
-            if(animation.getPlayed())
+        {
+            PlayerAttack ea = new PlayerAttack(tileMap, facingRight);
+            ea.setPosition(x,y);
+            enemyAttack.add(ea);
+            if (animation.getPlayed())
                 attacking = false;
+
+        }
 
         if(attacking && !dead)
         {
@@ -158,6 +188,12 @@ public class FlyingGhost extends Enemy {
 //            return;
 
         setMapPosition();
+
+        for(int i = 0; i<enemyAttack.size(); i++)
+        {
+            enemyAttack.get(i).draw(gr);
+        }
+
         super.draw(gr);
     }
 }

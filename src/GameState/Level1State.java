@@ -80,7 +80,7 @@ public class Level1State extends GameState {
         try
         {
             elapsed = System.nanoTime() - start;
-            System.out.println(elapsed);
+//            System.out.println(elapsed);
             //System.out.println("Updating Player");
             player.update();
             //System.out.println("Player Updated");
