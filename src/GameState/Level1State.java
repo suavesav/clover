@@ -37,6 +37,7 @@ public class Level1State extends GameState {
     public Sound fire;
     private Sound die; //accessed from level1 state
     public Sound hit;
+    public Sound mushroom;
 
     public Level1State(GameStateManager gsm)
     {
@@ -67,6 +68,7 @@ public class Level1State extends GameState {
         fire = soundManager.getSound("./Resources/Sounds/fire2.wav");
         die = soundManager.getSound("./Resources/Sounds/jumpsound.aiff");
         hit = soundManager.getSound("./Resources/Sounds/hit.wav");
+        mushroom = soundManager.getSound("./Resources/Sounds/mushroom.wav");
     }
 
     private void populatePowerUps()
@@ -130,12 +132,20 @@ public class Level1State extends GameState {
                 }
             }
             player.checkPowerUp(powerups);
+
             player.checkAttack(enemies);
             for(int i = 0; i<player.playerAttack.size(); i++)
             {
                 if(player.playerAttack.get(i).getHit() == true)
                     soundManager.play(hit);
             }
+
+            for(int i = 0; i<powerups.size(); i++)
+            {
+                if(powerups.get(i).getUsed())
+                    soundManager.play(mushroom);
+            }
+
             if(!player.getAttackSoundPlayed())
             {
                 soundManager.play(fire);
