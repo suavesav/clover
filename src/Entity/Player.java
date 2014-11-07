@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import GameState.Level1State;
 import Audio.*;
 
 
@@ -30,13 +31,14 @@ public class Player extends MapObject {
     //Attack
     private boolean attacking;
     private int attackDamage;
-    private ArrayList<PlayerAttack> playerAttack;
+    public ArrayList<PlayerAttack> playerAttack; //To access playerAttack in Level1State
 
     private ArrayList<BufferedImage[]> sprites;
 //    private final int[] numFrames = {2, 8};
     private final int[] numFrames = {6};
 //    private static final int IDLE = 0;
     private static final int WALKING = 0;
+    private boolean attackSoundPlayed;
 
     public Player(TileMap tm)
     {
@@ -69,6 +71,7 @@ public class Player extends MapObject {
         saCount = 0;
 
         xcount = 0;
+        attackSoundPlayed = true;
 
 
         //Load Sprites
@@ -108,10 +111,14 @@ public class Player extends MapObject {
     public int getPoints() {return points;}
 
 
-    public void setAttacking()
+    public void setAttacking() {attacking = true;}
+
+    public void setAttackSoundPlayed()
     {
-        attacking = true;
+        attackSoundPlayed = true;
     }
+
+    public boolean getAttackSoundPlayed() {return attackSoundPlayed;}
 
     public void setSuperAttack()
     {
@@ -151,6 +158,7 @@ public class Player extends MapObject {
                 if(playerAttack.get(j).intersects(e))
                 {
                     e.hit(attackDamage);
+                    //soundManager.play(hit);
                     playerAttack.get(j).setHit();
                     break;
                 }
@@ -212,7 +220,7 @@ public class Player extends MapObject {
             pa.setPosition(x,y);
             playerAttack.add(pa);
             attacking = false;
-//            attacksound.playSound("./Resources/Sounds/fire.wav"); //play sound
+            attackSoundPlayed = false;
         }
 
         if(superAttackVar)

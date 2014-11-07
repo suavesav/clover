@@ -3,6 +3,7 @@ package GameState;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import Audio.*;
 import Entity.Entity.Enemies.FlyingGhost;
 import Entity.Player;
 import Entity.Enemy;
@@ -12,6 +13,7 @@ import Main.GamePanel;
 import TileMap.*;
 import java.util.ArrayList;
 import Entity.HUD;
+import javax.sound.sampled.AudioFormat;
 
 /**
  * Created by Sav on 10/13/14.
@@ -26,6 +28,15 @@ public class Level1State extends GameState {
     private HUD hud;
     private long skeystart;
     private long skeyelapsed;
+
+    //SOUNDS
+    // uncompressed, 44100Hz, 16-bit, mono, signed, little-endian
+    private static final AudioFormat PLAYBACK_FORMAT = new AudioFormat(44100, 16, 1, true, false);
+    private static final int MANY_SOUNDS_COUNT = SoundManager.getMaxSimultaneousSounds(PLAYBACK_FORMAT);
+    public SoundManager soundManager;
+    public Sound fire;
+    private Sound die; //accessed from level1 state
+    public Sound hit;
 
     public Level1State(GameStateManager gsm)
     {
@@ -49,6 +60,13 @@ public class Level1State extends GameState {
 
         hud = new HUD(player);
 //        start = System.nanoTime();
+        initSounds(); //initialize sounds stuff
+    }
+    public void initSounds() { //initialize sound variables
+        soundManager = new SoundManager(PLAYBACK_FORMAT);
+        fire = soundManager.getSound("./Resources/Sounds/fire.wav");
+        die = soundManager.getSound("./Resources/Sounds/jumpsound.aiff");
+        hit = soundManager.getSound("./Resources/Sounds/highsound.aiff");
     }
 
     private void populatePowerUps()
@@ -92,6 +110,7 @@ public class Level1State extends GameState {
                 e.update();
                 if(e.getDead())
                 {
+                    soundManager.play(die);
                     enemies.remove(i);
                     i--;
                     player.upHealth(10);
@@ -111,6 +130,16 @@ public class Level1State extends GameState {
             }
             player.checkPowerUp(powerups);
             player.checkAttack(enemies);
+            for(int i = 0; i<player.playerAttack.size(); i++)
+            {
+                if(player.playerAttack.get(i).getHit() == true)
+                    soundManager.play(hit);
+            }
+            if(!player.getAttackSoundPlayed())
+            {
+                soundManager.play(fire);
+                player.setAttackSoundPlayed();
+            }
 
 
             if(player.getDead())
