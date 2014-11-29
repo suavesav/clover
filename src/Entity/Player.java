@@ -41,6 +41,7 @@ public class Player extends MapObject {
     private static final int WALKING = 0;
     private boolean attackSoundPlayed;
     private long shoottimer;
+    private int shootCounter;
     private long invincibilityTimer;
     private double invxcount;
 
@@ -77,6 +78,7 @@ public class Player extends MapObject {
         xcount = 0;
         attackSoundPlayed = true;
         shoottimer = System.nanoTime();
+        shootCounter = 0;
 
 
         //Load Sprites
@@ -116,7 +118,7 @@ public class Player extends MapObject {
     public int getPoints() {return points;}
 
 
-    public void setAttacking() {attacking = true;}
+    public void setAttacking(boolean b) {attacking = b;}
 
     public void setAttackSoundPlayed()
     {
@@ -142,7 +144,7 @@ public class Player extends MapObject {
 
         if((saCount==0) || (saCount<10 && saElapsed>1000))
         {
-            setAttacking();
+            setAttacking(true);
             saCount++;
             saStart = System.nanoTime();
         }
@@ -169,7 +171,7 @@ public class Player extends MapObject {
                 }
             }
 
-            //Collision with Enemy
+            //Player collision with Enemy
             if(intersects(e) && !getInvincible())
                 hit(e.getDamage());
         }
@@ -234,12 +236,18 @@ public class Player extends MapObject {
 
         if(attacking)
         {
-            if((System.nanoTime() - shoottimer)/1000000 > 500)
+            if(shootCounter == 9)
             {
+                if(((System.nanoTime() - shoottimer)/1000000 > 1000))
+                    shootCounter = 0;
+            }
+            else if(((System.nanoTime() - shoottimer)/1000000 > 500) && shootCounter<9)
+            {
+                shootCounter++;
                 PlayerAttack pa = new PlayerAttack(tileMap, facingRight);
                 pa.setPosition(x,y);
                 playerAttack.add(pa);
-                attacking = false;
+                //attacking = false;
                 attackSoundPlayed = false;
                 shoottimer = System.nanoTime();
             }
