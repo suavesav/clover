@@ -12,12 +12,12 @@ import java.util.ArrayList;
 /**
  * Created by Sav on 11/6/14.
  */
-public class Mushroom extends PowerUp
+public class Star extends PowerUp
 {
     private ArrayList<BufferedImage[]> sprites;
     private final int[] numFrames = {1};
 
-    public Mushroom(TileMap tm)
+    public Star(TileMap tm)
     {
         super(tm);
 
@@ -27,11 +27,11 @@ public class Mushroom extends PowerUp
         height = 30;
         cwidth = 10;
         cheight = 10;
-        setType(1);
+        setType(2);
 
         try
         {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Powerups/mushroom.png"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Powerups/star.png"));
             sprites = new ArrayList<BufferedImage[]>();
 
             for(int i = 0; i < numFrames.length; i++)

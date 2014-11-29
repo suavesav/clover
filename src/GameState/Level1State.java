@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import Audio.*;
 import Entity.Entity.Enemies.FlyingGhost;
+import Entity.Entity.PowerUps.Star;
 import Entity.Player;
 import Entity.Enemy;
 import Entity.PowerUp;
@@ -80,6 +81,12 @@ public class Level1State extends GameState {
         mush = new Mushroom(tileMap);
         mush.setPosition(220, 100);
         powerups.add(mush);
+
+        Star star;
+        star = new Star(tileMap);
+        star.setPosition(240, 100);
+        powerups.add(star);
+
     }
     private void populateEnemies()
     {
@@ -101,11 +108,7 @@ public class Level1State extends GameState {
     {
         try
         {
-//            elapsed = System.nanoTime() - start;
-//            System.out.println(elapsed);
-            //System.out.println("Updating Player");
             player.update();
-            //System.out.println("Player Updated");
             tileMap.setPosition(GamePanel.WIDTH/2 - player.getx(), GamePanel.HEIGHT/2 - player.gety());
 
             for(int i = 0; i<enemies.size(); i++)

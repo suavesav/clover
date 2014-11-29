@@ -25,6 +25,7 @@ public class Player extends MapObject {
     public long saElapsed;
     private int saCount;
     private boolean superAttackVar;
+    private boolean invincible;
 
 
 
@@ -40,6 +41,8 @@ public class Player extends MapObject {
     private static final int WALKING = 0;
     private boolean attackSoundPlayed;
     private long shoottimer;
+    private long invincibilityTimer;
+    private double invxcount;
 
     public Player(TileMap tm)
     {
@@ -167,7 +170,7 @@ public class Player extends MapObject {
             }
 
             //Collision with Enemy
-            if(intersects(e))
+            if(intersects(e) && !getInvincible())
                 hit(e.getDamage());
         }
     }
@@ -178,11 +181,26 @@ public class Player extends MapObject {
         {
             if(intersects(powerups.get(i)))
             {
-                upHealth(5);
+                if(powerups.get(i).getType() == 1)
+                    upHealth(5);
+                else if(powerups.get(i).getType() == 2)
+                    setInvincible();
                 powerups.get(i).setUsed();
             }
         }
     }
+
+    public void setInvincible()
+    {
+        invincible = true;
+        invincibilityTimer = System.nanoTime();
+    }
+
+    public boolean getInvincible()
+    {
+        return invincible;
+    }
+
 
     public void upHealth(int h)
     {
@@ -193,7 +211,9 @@ public class Player extends MapObject {
 
     public void hit(int damage)
     {
-        health -= damage;
+        if(!getInvincible())
+            health -= damage;
+
         if(health < 0)
             health = 0;
 
@@ -204,12 +224,8 @@ public class Player extends MapObject {
     //Update
     public void update()
     {
-        //Update position
-        //System.out.println("Getting Next Position...");
         getNextPosition();
-        //System.out.println("Checking Tile Collision...");
         checkTileCollision();
-        //System.out.println("Setting Position...");
         setPosition(xtemp, ytemp);
 
         attack +=1;
@@ -226,6 +242,16 @@ public class Player extends MapObject {
                 attacking = false;
                 attackSoundPlayed = false;
                 shoottimer = System.nanoTime();
+            }
+        }
+
+        if(invincible)
+        {
+            invxcount += Math.abs(xtemp - x);
+            if(((System.nanoTime() - invincibilityTimer)/1000000 > 1000) || invxcount>400)
+            {
+                invincible = false;
+                invxcount = 0;
             }
         }
 
@@ -250,7 +276,7 @@ public class Player extends MapObject {
             }
         }
         //Movement Animation
-        //System.out.println("Creating Animation");
+
         if(left || right || jumping)
         {
             if(currAction != WALKING)
@@ -273,14 +299,8 @@ public class Player extends MapObject {
                 width = 24;
             }
         }
-        //System.out.println("Updating Animation");
-        animation.update();
 
-        //if(attacking)
-        //{
-            //todo Add attacking animation
-        //}
-        //todo add any other animations, jumping, falling, etc...
+        animation.update();
 
         if(right)
             facingRight = true;

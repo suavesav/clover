@@ -10,6 +10,7 @@ import java.awt.*;
 public class PowerUp extends MapObject {
 
     private boolean used;
+    private int type;
 
     public PowerUp(TileMap tm)
     {
@@ -21,6 +22,12 @@ public class PowerUp extends MapObject {
 
     public void setUsed()
     {used = true;}
+
+    public int getType()
+    {return type;}
+
+    public void setType(int t)
+    {type = t;}
 
     public void update()
     {}
