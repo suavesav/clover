@@ -45,6 +45,9 @@ public class Player extends MapObject {
     private long invincibilityTimer;
     private double invxcount;
 
+    private long stillHealthTimer;
+    private double xold;
+
     public Player(TileMap tm)
     {
         super(tm);
@@ -79,6 +82,8 @@ public class Player extends MapObject {
         attackSoundPlayed = true;
         shoottimer = System.nanoTime();
         shootCounter = 0;
+        stillHealthTimer = System.nanoTime();
+        xold = x;
 
 
         //Load Sprites
@@ -223,6 +228,10 @@ public class Player extends MapObject {
             dead = true;
     }
 
+    public void unsetShootCounter()
+    {
+        shootCounter = 0;
+    }
     //Update
     public void update()
     {
@@ -236,12 +245,12 @@ public class Player extends MapObject {
 
         if(attacking)
         {
-            if(shootCounter == 9)
+            if(shootCounter == 10)
             {
                 if(((System.nanoTime() - shoottimer)/1000000 > 1000))
                     shootCounter = 0;
             }
-            else if(((System.nanoTime() - shoottimer)/1000000 > 500) && shootCounter<9)
+            else if(((System.nanoTime() - shoottimer)/1000000 > 500) && shootCounter<10)
             {
                 shootCounter++;
                 PlayerAttack pa = new PlayerAttack(tileMap, facingRight);
@@ -268,11 +277,22 @@ public class Player extends MapObject {
             superAttack();
         }
 
+        if((System.nanoTime() - stillHealthTimer)/1000000 > 1000)
+        {
+            if(xold == x)
+            {
+                upHealth(5);
+            }
+            xold = x;
+            stillHealthTimer = System.nanoTime();
+        }
+
         if(xcount>40 || xcount < -40)
         {
             xcount = 0;
             upHealth(1);
         }
+
 
         for(int i = 0; i < playerAttack.size(); i++)
         {
@@ -377,7 +397,7 @@ public class Player extends MapObject {
             playerAttack.get(i).draw(gr);
         }
 
-        System.out.printf("%d, %d, %d, %d\n", (int)x, (int)xmap, (int)y, (int)ymap);
+        //System.out.printf("%d, %d, %d, %d\n", (int)x, (int)xmap, (int)y, (int)ymap);
         super.draw(gr);
 
     }

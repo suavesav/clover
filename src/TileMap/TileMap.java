@@ -63,7 +63,12 @@ public class TileMap {
                 tiles[0][col] = new Tile(subImage, Tile.NORMAL);
 
                 subImage = tileset.getSubimage(col*tileSize, tileSize, tileSize, tileSize);
-                tiles[1][col] = new Tile(subImage, Tile.BLOCKED);
+                if(col < 5)
+                    tiles[1][col] = new Tile(subImage, Tile.BLOCKED);
+                else if(col == 5)
+                    tiles[1][col] = new Tile(subImage, Tile.EXPLODING);
+                else if(col == 6)
+                    tiles[1][col] = new Tile(subImage, Tile.GAS);
             }
         }
         catch (Exception E)

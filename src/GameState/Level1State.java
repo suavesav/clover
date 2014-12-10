@@ -27,6 +27,7 @@ public class Level1State extends GameState {
     private ArrayList<Enemy> enemies;
     private ArrayList<PowerUp> powerups;
     private HUD hud;
+    private long sKeyTimer;
 
 
     //SOUNDS
@@ -47,7 +48,7 @@ public class Level1State extends GameState {
     public void init()
     {
         tileMap = new TileMap(30);
-        tileMap.loadTiles("/Tilesets/grasstileset.gif");
+        tileMap.loadTiles("/Tilesets/tset.png");
         tileMap.loadMap("/Maps/level1-2.map");
         tileMap.setPosition(0, 0);
 
@@ -235,7 +236,9 @@ public class Level1State extends GameState {
         if(k == KeyEvent.VK_LEFT)
             player.setDown(false);
         if(k == KeyEvent.VK_S)
+        {
             player.setAttacking(false);
-
+            player.unsetShootCounter();
+        }
     }
 }

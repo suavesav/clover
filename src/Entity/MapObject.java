@@ -92,8 +92,8 @@ public abstract class MapObject {
         //See if the tile is blocked and act accordingly
         topLeft = tl==Tile.BLOCKED;
         topRight = tr==Tile.BLOCKED;
-        bottomLeft = bl==Tile.BLOCKED;
-        bottomRight = br==Tile.BLOCKED;
+        bottomLeft = bl==Tile.BLOCKED || bl==Tile.EXPLODING || bl==Tile.GAS;
+        bottomRight = br==Tile.BLOCKED|| bl==Tile.EXPLODING || bl==Tile.GAS;
     }
 
     public void checkTileCollision()
