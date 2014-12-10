@@ -11,6 +11,8 @@ public class Tile {
 
     public static final int NORMAL = 0;
     public static final int BLOCKED = 1;
+    public static final int EXPLODING = 2;
+    public static final int GAS = 3;
 
     public Tile(BufferedImage image, int type)
     {
