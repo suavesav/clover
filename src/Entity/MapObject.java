@@ -48,6 +48,9 @@ public abstract class MapObject {
     protected double maxFallSpeed;
     protected double jumpStart;
 
+    protected boolean isExploding, isGas;
+    protected boolean exploding, gas;
+
     public MapObject(TileMap tm)
     {
         tileMap = tm;
@@ -82,19 +85,26 @@ public abstract class MapObject {
             return;
         }
 
-
         //Getting the types of the tiles to see if it would be special
         int tl = tileMap.getType(topTile, leftTile);
         int tr = tileMap.getType(topTile, rightTile);
         int bl = tileMap.getType(bottomTile, leftTile);
         int br = tileMap.getType(bottomTile, rightTile);
 
+        isExploding = (bl==Tile.EXPLODING || br==Tile.EXPLODING);
+        isGas = (bl==Tile.GAS || br==Tile.GAS);
+
         //See if the tile is blocked and act accordingly
         topLeft = tl==Tile.BLOCKED;
         topRight = tr==Tile.BLOCKED;
         bottomLeft = bl==Tile.BLOCKED || bl==Tile.EXPLODING || bl==Tile.GAS;
-        bottomRight = br==Tile.BLOCKED|| bl==Tile.EXPLODING || bl==Tile.GAS;
+        bottomRight = br==Tile.BLOCKED|| br==Tile.EXPLODING || br==Tile.GAS;
     }
+
+//    public void getTileType(double x, double y)
+//    {
+//        calculateCorners(x, y);
+//    }
 
     public void checkTileCollision()
     {
@@ -117,7 +127,7 @@ public abstract class MapObject {
             if(topLeft || topRight)
             {
                 //Block Player/Whatever Object from moving up
-                System.out.println("BLOCKED DETECTED");
+//                System.out.printf("1.BLOCKED DETECTED %b %b\n", isExploding, isGas);
                 dy=0;
                 ytemp = currRow * tileSize + cheight / 2;
             }
@@ -130,7 +140,7 @@ public abstract class MapObject {
             if(bottomLeft || bottomRight)
             {
                 //Block Player/Whatever Object from moving down
-                System.out.println("BLOCKED DETECTED");
+//                System.out.printf("2.BLOCKED DETECTED %b %b\n", isExploding, isGas);
                 dy=0;
                 falling = false;
                 ytemp = (currRow+1) * tileSize - cheight / 2;
@@ -144,7 +154,7 @@ public abstract class MapObject {
         {
             if(topLeft || bottomLeft)
             {
-//                System.out.println("BLOCKED DETECTED");
+//                System.out.printf("3.BLOCKED DETECTED %b %b\n", isExploding, isGas);
                 dx=0;
                 xtemp = currCol * tileSize + cwidth / 2;
             }
@@ -157,7 +167,7 @@ public abstract class MapObject {
             if(topRight || bottomRight)
             {
                 //Block Player/Whatever Object from moving up
-//                System.out.println("BLOCKED DETECTED");
+//                System.out.printf("4.BLOCKED DETECTED %b %b\n", isExploding, isGas);
                 dx=0;
                 xtemp = (currCol+1) * tileSize - cwidth / 2;
             }
@@ -212,6 +222,20 @@ public abstract class MapObject {
     public void setUp(boolean b) {up = b;}
     public void setDown(boolean b) {down = b;}
     public void setJumping(boolean b) {jumping = b;}
+    public void unsetIsExploding()
+    {
+        int leftTile = (int)(x - cwidth / 2) / tileSize;
+        int bottomTile = (int)(y + cheight / 2 - 1) / tileSize;
+        isExploding = false;
+        tileMap.setType(bottomTile+1, leftTile, 21);
+    }
+    public void unsetIsGas()
+    {
+        int leftTile = (int)(x - cwidth / 2) / tileSize;
+        int bottomTile = (int)(y + cheight / 2 - 1) / tileSize;
+        isExploding = false;
+        tileMap.setType(bottomTile+1, leftTile, 21);
+    }
 
     public void draw(Graphics2D gr)
     {

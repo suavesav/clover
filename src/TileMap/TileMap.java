@@ -128,6 +128,15 @@ public class TileMap {
         return tiles[r][c].getType();
     }
 
+    public void setType(int row, int col, int t)
+    {
+//        int rc = map[row][col];
+        map[row][col] = t;
+//        int r = rc / numTilesAcross;
+//        int c = rc % numTilesAcross;
+//        tiles[r][c].setType(t);
+    }
+
     public void setPosition(double x, double y)
     {
         this.x = x;

@@ -50,12 +50,12 @@ public class Star extends PowerUp
             E.printStackTrace();
         }
 
-        System.out.println(sprites.get(0).length);
+        //System.out.println(sprites.get(0).length);
         //System.out.println(sprites.get(1).length);
         animation = new Animation();
         animation.setFrames(sprites.get(0));
         animation.setDelay(400);
-        System.out.println("Player Constructor DONE");
+        //System.out.println("Player Constructor DONE");
 
     }
 

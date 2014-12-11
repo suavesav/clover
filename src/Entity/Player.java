@@ -48,6 +48,10 @@ public class Player extends MapObject {
     private long stillHealthTimer;
     private double xold;
 
+    private boolean yellowBlock;
+    private long yellowBlockTimer;
+    private long yellowBlockPosDelta;
+
     public Player(TileMap tm)
     {
         super(tm);
@@ -84,6 +88,7 @@ public class Player extends MapObject {
         shootCounter = 0;
         stillHealthTimer = System.nanoTime();
         xold = x;
+        yellowBlock = false;
 
 
         //Load Sprites
@@ -107,12 +112,12 @@ public class Player extends MapObject {
             E.printStackTrace();
         }
 
-        System.out.println(sprites.get(0).length);
+        //System.out.println(sprites.get(0).length);
         //System.out.println(sprites.get(1).length);
         animation = new Animation();
         animation.setFrames(sprites.get(WALKING));
         animation.setDelay(400);
-        System.out.println("Player Constructor DONE");
+        //System.out.println("Player Constructor DONE");
     }
 
     //Getters
@@ -237,13 +242,36 @@ public class Player extends MapObject {
     {
         getNextPosition();
         checkTileCollision();
+        //System.out.printf("Exploding:%b Gas:%b\n", isExploding, isGas);
+        if(isExploding)
+        {
+            unsetIsExploding();
+            hit(10);
+        }
+
+        if(isGas)
+        {
+            unsetIsGas();
+            yellowBlock = true;
+            yellowBlockTimer = System.nanoTime();
+            yellowBlockPosDelta = 0;
+        }
         setPosition(xtemp, ytemp);
 
         attack +=1;
         if(attack>maxAttack)
             attack = maxAttack;
 
-        if(attacking)
+        if(yellowBlock)
+        {
+            yellowBlockPosDelta += Math.abs(dx);
+            if((System.nanoTime()-yellowBlockTimer)/1000000 > 1000)
+                yellowBlock = false;
+            if(yellowBlockPosDelta > 400)
+                yellowBlock = false;
+        }
+
+        if(attacking&&!yellowBlock)
         {
             if(shootCounter == 10)
             {

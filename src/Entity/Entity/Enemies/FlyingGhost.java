@@ -104,7 +104,7 @@ public class FlyingGhost extends Enemy {
     {
         elapsed = System.nanoTime() - start;
         elapsed /= 1000000;
-        System.out.println(elapsed);
+        //System.out.println(elapsed);
 
         getNextPosition();
         checkTileCollision();
